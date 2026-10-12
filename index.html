@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>萬安體廢文產生器（十強市政大合唱版）</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #1a365d;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 25px;
+            font-size: 0.9em;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2d3748;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        button {
+            flex: 1;
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #2b6cb0;
+        }
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #ebf8ff;
+            border-left: 5px solid #3182ce;
+            border-radius: 4px;
+            display: none;
+        }
+        .result-title {
+            font-weight: bold;
+            color: #2b6cb0;
+            margin-bottom: 10px;
+        }
+        .speech-text {
+            line-height: 1.8;
+            font-size: 17px;
+            white-space: pre-line;
+        }
+        .action {
+            color: #e53e3e;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>萬安體廢文自動產生器</h1>
+    <div class="subtitle">即刻全面掌握最新脈動</div>
+    
+    <div class="form-group">
+        <label for="question">記者提問：</label>
+        <input type="text" id="question" placeholder="例如：民眾反應某A百貨上廁所沒衛生紙">
+    </div>
+    
+    <div class="form-group">
+        <label for="topic">想轉移過去的無關市政話題（留空則隨機發揮）：</label>
+        <input type="text" id="topic" placeholder="自訂話題，或留空體驗隨機轉移">
+    </div>
+    
+    <div class="btn-group">
+        <button onclick="generateSpeech()">即刻回應！！</button>
+    </div>
+    
+    <div class="result-box" id="resultBox">
+        <div class="result-title">🎤 萬安市長現場回應：</div>
+        <div class="speech-text" id="speechText"></div>
+    </div>
+</div>
+
+<script>
+// 精選自近期台北市政府最新真實新聞稿與施政方針
+const randomTopics = [
+    "「1999市民熱線全面導入AI語音轉文字與智慧查詢系統」",
+    "「領先全國推辦之家有12歲以下孩童家長『育兒減少工時計畫』」",
+    "「斥資8.2億打造全新鏡面水池與城市森林的府前廣場整體改建工程」",
+    "「擘劃未來300公頃松山機場遷移與AI科技園區整體評估專案」",
+    "「落實綠色運輸並健全保障之YouBike全車種強制納保新制」",
+    "「引領數位潮流、深耕在地基底的全新公館電競館啟用營運專案」",
+    "「首創全國地方衛生單位最大規模之食因性檢驗編組與食品安全精進計畫」",
+    "「協助優秀青年與國際接軌拓展海外市場之『台北市創業家護照』專案」",
+    "「永續環保愛地球、全面推動旅宿業禁用一次性備品綠色低碳政策」",
+    "「少子女化對策之『校校有公托』與全國最高托育補助之優化育兒政策」"
+];
+
+function generateSpeech() {
+    let q = document.getElementById('question').value.trim();
+    let t = document.getElementById('topic').value.trim();
+    
+    if(!q) {
+        alert('請先輸入記者的提問！');
+        return;
+    }
+    
+    if(!t) {
+        const randomIndex = Math.floor(Math.random() * randomTopics.length);
+        t = randomTopics[randomIndex];
+    } else {
+        if(!t.startsWith('「')) t = `「${t}」`;
+    }
+    
+    let speech = `我剛剛也說過，也已經講得很清楚，關於<strong>民眾反應${q}這部分</strong><span class="action">（音調拉高）</span>，我們當然是相當嚴肅在看待，並且即刻掌握<span class="action">（語氣沉穩）</span>。\n\n`;
+    
+    speech += `大家都可以看到，台北市在整個城市治理、還有永續發展上，是最重要的。所以這部分，我們團隊當然要好好地，以最高標準來全面要求。最重要的<span class="action">（語氣更高昂）</span>，市政府團隊從上到下的努力，就像<span class="action">（頓一拍）</span>我們即刻全面啟動並落實的<strong>${t}</strong>。\n\n`;
+    
+    speech += `我們立即、相當嚴肅地看待這部分的長遠發展。所以，我們當然會好好地結合各局處，進行最系統性的優化。我想這不只是攸關單一事件的解決，這就像（再頓一拍，眼神發亮），我們**即刻讓大巨蛋在第一年就順利啟用**、我們**成功引進輝達正式落腳台北**，以及我們**全面推辦生生喝鮮乳來造福台北市的所有小學生**！\n\n`;
+    
+    speech += `這些實實在在、不容抹滅的重大成果，都證明了我們帶領台北邁向安全、運動與未來生活的決心。我想這就是我們對這整個部分<span class="action">（抿嘴微笑，自信、極具魅力地看向記者）</span>最務實、也是最刻不容緩的態度。`;
+    
+    document.getElementById('speechText').innerHTML = speech;
+    document.getElementById('resultBox').style.display = 'block';
+}
+</script>
+
+</body>
+</html>
